@@ -1,6 +1,6 @@
-import fs from 'fs';
-import yaml from "yaml";
-import { default as merge } from "lodash.merge";
+import * as fs from 'fs';
+import * as yaml from "yaml";
+import { merge } from "lodash";
 
 export async function mergeContributionConfig(namedConfigs: any, contributionFilename: string) {
   let contributionConfigurationFilename = contributionFilename.replace(/\.md/i, ".yaml");

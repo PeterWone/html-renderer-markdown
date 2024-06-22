@@ -6,17 +6,23 @@ import { IResourceDescriptor } from "./IResourceDescriptor";
 import { marked } from 'marked';
 import { dom } from "./dom.js";
 import * as Handlebars from "handlebars";
-// import * as smartquotes from "smartquotes";
+// import smartquotes from "smartquotes";
 import { processFencedBlocks } from './processFencedBlocks.js';
 import { GenerateSettingsCss } from './settings.js';
+
 // RESOURCES 
 const resources = new Map<string, IResourceDescriptor>();
 
 // Resolve the content of a stylesheet.
 // Then add it to resources with the CSS mimeType
 // under the name that will be used to request it.
-resources.set("markdown.css", {
-	content: require("./markdown.css").default.toString(),
+resources.set("default-markdown.css", {
+	content: require("./default-markdown.css").default.toString(),
+	mimeType: "text/css; charset=utf-8;"
+});
+
+resources.set("katex.min.css", {
+  content: require("../node_modules/katex/dist/katex.css").default.toString(),
 	mimeType: "text/css; charset=utf-8;"
 });
 
@@ -38,11 +44,11 @@ export async function getBodyHtml(raw: string, languageId: string) {
 // 	return "CUSTOM TITLE STRING";
 // }
 
-// todo RETURN A LIST OF THE CSS RESOURCES YOU WANT LINKED 
-// These can reference absolute URLs or your bundled resources.
 export function getCssUriStrings(): Array<string> {
-	const cssUriStrings: Array<string> = [
-		"bundled/svg.css"
+	const cssUriStrings = [
+    "bundled/default-markdown.css",
+    "bundled/katex.min.css",
+    "bundled/settings.css"
 	];
 	return cssUriStrings;
 }
