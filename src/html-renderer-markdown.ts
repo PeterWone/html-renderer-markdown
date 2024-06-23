@@ -1,14 +1,7 @@
-import { Metadata } from './metadata';
 import * as vscode from 'vscode';
-import * as fs from "fs";
-import * as path from "path";
 import { IResourceDescriptor } from "./IResourceDescriptor";
+import { processFencedBlocks } from './processFencedBlocks';
 import { marked } from 'marked';
-import { dom } from "./dom.js";
-import * as Handlebars from "handlebars";
-// import smartquotes from "smartquotes";
-import { processFencedBlocks } from './processFencedBlocks.js';
-import { GenerateSettingsCss } from './settings.js';
 
 // RESOURCES 
 const resources = new Map<string, IResourceDescriptor>();
@@ -31,12 +24,9 @@ export function isEnabled(): boolean {
 	return vscode.workspace.getConfiguration("print").renderMarkdown;
 }
 
-// todo IMPLEMENT YOUR OWN TRANSFORMATION TO HTML
-// This is the content of the body tag, not the whole page.
-// While you can embed style this is hard to customise and you are
-// better off linking a stylesheet resource.
 export async function getBodyHtml(raw: string, languageId: string) {
-  // const updatedTokens = await processFencedBlocks(project.Config, contributionFilename, resolvedTemplate)
+  const updatedTokens = await processFencedBlocks({}, raw);
+  return marked.parser(updatedTokens);
 }
 
 // todo implement getTitle when the default is unsatisfactory

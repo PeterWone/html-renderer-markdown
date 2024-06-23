@@ -4,19 +4,17 @@ import * as yaml from "yaml";
 import { merge } from "lodash";
 import * as katex from "katex";
 import { v4 as uuidv4 } from "uuid";
-import { getDotSvgAsync } from './getDotSvgAsync.js';
-import { getSmilesSvgAsync } from './getSmilesSvgAsync.js';
-import { mergeContributionConfig } from './mergeContributionConfig.js';
+import { getDotSvgAsync } from './getDotSvgAsync';
+import { getSmilesSvgAsync } from './getSmilesSvgAsync';
 import { fixFalsePrecision, formatXml, applyDiagramStyle, stripPreamble } from './svg-tools';
 import yuml2svg from "yuml2svg";
 
 const svgContributors = ["YUML", "DOT", "SMILES"];
-export async function processFencedBlocks(defaultConfig: any, contributionFilename: string, raw: string) {
+export async function processFencedBlocks(defaultConfig: any, raw: string) {
   const tokens = marked.lexer(raw);
   let activeConfigName = "DEFAULT";
   const namedConfigs: any = { DEFAULT: defaultConfig };
   const stack: any[] = [];
-  mergeContributionConfig(namedConfigs, contributionFilename);
 
   function getConfig(lang?: string): any {
     const result: any = {};
@@ -53,8 +51,7 @@ export async function processFencedBlocks(defaultConfig: any, contributionFilena
             // svg = reparentGraphicalChildren(svg);
             break;
         }
-        fs.writeFileSync(`out/${filepath}`, applyDiagramStyle(stripPreamble(formatXml(fixFalsePrecision(svg!, 1))), getConfig()));
-        updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<img src="./${filepath}" class="${LANG}"/>` });
+        updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<img src="data:image/svg+xml;base64,${btoa(svg!)}" class="${LANG}"/>` });
       } else {
         switch (LANG) {
           case "LATEX":
@@ -65,7 +62,7 @@ export async function processFencedBlocks(defaultConfig: any, contributionFilena
             if (namedConfigs[token.text]) {
               activeConfigName = token.text;
             } else {
-              console.log(`${contributionFilename} does not define config "${token.text}"`);
+              console.log(`Config name "${token.text}" is not defined`);
             }
             break;
           case "PUSH":

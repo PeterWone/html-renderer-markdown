@@ -1,4 +1,8 @@
-const SmilesDrawer = require('SmilesDrawer');
+const SmilesDrawer = require('smiles-drawer');
+import { dom } from "./dom";
+
+global.document = dom.window.document;
+global.window = dom.window as any;
 
 export async function getSmilesSvgAsync(smiles: string, options: any): Promise<string> {
   const svgDrawer = new SmilesDrawer.SvgDrawer(options);

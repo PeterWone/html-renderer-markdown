@@ -53,8 +53,11 @@ const extensionConfig = {
         use: [
           'raw-loader'
         ]
-      }
-    ]
+      },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      }]
   },
   devtool: 'nosources-source-map',
   infrastructureLogging: {
