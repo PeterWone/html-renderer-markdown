@@ -27,7 +27,7 @@
 	],
 	"scripts": {
 		"vscode:prepublish": "webpack --mode production",
-		"webpack": "webpack --mode development",
+		"webpack": "node font-load-generator/app.js node_modules/katex/dist/fonts src/resources.js && webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\""
@@ -43,6 +43,7 @@
 		"@typescript-eslint/parser": "^7.0.2",
 		"css-loader": "^6.10.0",
 		"eslint": "^8.56.0",
+		"file-loader": "^6.2.0",
 		"mocha": "^8.1.3",
 		"raw-loader": "^4.0.2",
 		"ts-loader": "^9.5.1",
