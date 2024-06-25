@@ -27,7 +27,7 @@
 	],
 	"scripts": {
 		"vscode:prepublish": "webpack --mode production",
-		"webpack": "node font-load-generator/app.js node_modules/katex/dist/fonts src/resources.js && webpack --mode development",
+		"webpack": "node resource-loader-generator/app.js && webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\""
