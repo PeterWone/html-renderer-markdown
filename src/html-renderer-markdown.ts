@@ -20,6 +20,11 @@ resources.set("katex.css", {
   mimeType: "text/css; charset=utf-8;"
 });
 
+resources.set("mermaid.min.js", {
+  content: require("../node_modules/mermaid/dist/mermaid.min.js").default.toString(),
+  mimeType: "text/javascript"
+});
+
 // give the user the option to turn off rendered printing
 export function isEnabled(): boolean {
   return vscode.workspace.getConfiguration("print").renderMarkdown;
@@ -48,3 +53,10 @@ export function getCssUriStrings(): Array<string> {
 export function getResource(name: string): IResourceDescriptor {
   return resources.get(name)!;
 }
+
+export function getScriptUriStrings(uri: vscode.Uri) {
+  return [
+    "bundled/mermaid.min.js"
+  ]
+}
+
