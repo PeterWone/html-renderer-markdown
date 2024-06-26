@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { IResourceDescriptor } from "./IResourceDescriptor";
 import { processFencedBlocks } from './processFencedBlocks';
 import { marked } from 'marked';
-const resources = require("./resources.js").resources;
+import resources from './resources';
 
 // RESOURCES 
 //onst resources = new Map<string, IResourceDescriptor>();
@@ -25,8 +25,9 @@ export function isEnabled(): boolean {
   return vscode.workspace.getConfiguration("print").renderMarkdown;
 }
 
-export async function getBodyHtml(raw: string, languageId: string) {
-  const updatedTokens = await processFencedBlocks({}, raw);
+export async function getBodyHtml(generatedResources: Map<string, IResourceDescriptor>, raw: string, languageId: string) {
+  generatedResources.clear();
+  const updatedTokens = await processFencedBlocks({}, raw, generatedResources);
   return marked.parser(updatedTokens);
 }
 

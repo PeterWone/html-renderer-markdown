@@ -4,5 +4,3 @@ node_modules
 *.vsix
 
 dist
-src/resources.js
-src/resources.ts
