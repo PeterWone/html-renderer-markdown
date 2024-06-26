@@ -12,6 +12,7 @@ export async function activate(context: vscode.ExtensionContext) {
     {
       getBodyHtml: htmlRendererMarkdown.getBodyHtml,
       getCssUriStrings: htmlRendererMarkdown.getCssUriStrings,
+      //getScriptUriStrings: htmlRendererMarkdown.getScriptUriStrings,
       getResource: htmlRendererMarkdown.getResource
     }
   );

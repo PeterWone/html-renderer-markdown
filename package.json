@@ -66,6 +66,7 @@
 		"katex": "^0.16.10",
 		"lodash.merge": "^4.6.2",
 		"marked": "^13.0.0",
+		"mermaid": "^10.9.1",
 		"node-loader": "^2.0.0",
 		"open": "^10.1.0",
 		"pagedjs": "^0.4.3",

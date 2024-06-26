@@ -1,3 +1,4 @@
+import { IResourceDescriptor } from './IResourceDescriptor';
 import * as fs from 'fs';
 import { Token, marked } from 'marked';
 import * as yaml from "yaml";
@@ -10,7 +11,7 @@ import { fixFalsePrecision, formatXml, applyDiagramStyle, stripPreamble } from '
 import yuml2svg from "yuml2svg";
 
 const svgContributors = ["YUML", "DOT", "SMILES"];
-export async function processFencedBlocks(defaultConfig: any, raw: string) {
+export async function processFencedBlocks(defaultConfig: any, raw: string, generatedResources: Map<string, IResourceDescriptor>) {
   const tokens = marked.lexer(raw);
   let activeConfigName = "DEFAULT";
   const namedConfigs: any = { DEFAULT: defaultConfig };
@@ -51,7 +52,14 @@ export async function processFencedBlocks(defaultConfig: any, raw: string) {
             // svg = reparentGraphicalChildren(svg);
             break;
         }
-        updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<img src="data:image/svg+xml;base64,${btoa(svg!)}" class="${LANG}"/>` });
+        const generatedResourceName = uuidv4();
+        let resourceDescriptor: IResourceDescriptor = {
+          mimeType: "image/svg+xml",
+          content: svg!
+        };
+        generatedResources.set(generatedResourceName, resourceDescriptor);
+        updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<img alt="${generatedResourceName}" src="generated/${generatedResourceName}" class="${LANG}"/>` });
+        // updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<img src="data:image/svg+xml;base64,${btoa(svg!)}" class="${LANG}"/>` });
       } else {
         switch (LANG) {
           case "LATEX":
@@ -77,6 +85,9 @@ export async function processFencedBlocks(defaultConfig: any, raw: string) {
             updatedTokens.push({ block: true, type: "code", raw: token.raw, text: resolvedConfig });
             break;
           //#endregion
+          case "MERMAID":
+            updatedTokens.push({ block: true, type: "html", raw: token.raw, text: `<pre class="mermaid">\n${token.text}\n</pre>` });
+            break;
           default: //unhandled passthrough
             updatedTokens.push(token);
             break;
