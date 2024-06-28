@@ -1,4 +1,7 @@
 import * as vscode from 'vscode';
+import * as path from "path";
+import * as fs from "fs";
+import { Metadata } from './metadata';
 import { IResourceDescriptor } from "./IResourceDescriptor";
 import { processFencedBlocks } from './processFencedBlocks';
 import { marked } from 'marked';
@@ -20,8 +23,13 @@ resources.set("katex.css", {
   mimeType: "text/css; charset=utf-8;"
 });
 
+let mermaidPath = path.join(Metadata.ExtensionPath, "mermaid.min.js");
+if (!fs.existsSync(mermaidPath)) {
+  mermaidPath = path.join(Metadata.ExtensionPath, "dist", "mermaid.min.js");
+}
+const mermaidContent = fs.readFileSync(mermaidPath);
 resources.set("mermaid.min.js", {
-  content: require("../node_modules/mermaid/dist/mermaid.min.js").default.toString(),
+  content: mermaidContent,
   mimeType: "text/javascript"
 });
 
@@ -35,11 +43,6 @@ export async function getBodyHtml(generatedResources: Map<string, IResourceDescr
   const updatedTokens = await processFencedBlocks({}, raw, generatedResources);
   return marked.parser(updatedTokens);
 }
-
-// todo implement getTitle when the default is unsatisfactory
-// export function getTitle(filepath: string): string {
-// 	return "CUSTOM TITLE STRING";
-// }
 
 export function getCssUriStrings(): Array<string> {
   const cssUriStrings = [

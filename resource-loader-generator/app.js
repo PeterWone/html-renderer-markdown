@@ -42,4 +42,7 @@ export default resources;
 
 `;
   await fs.writeFile(outputPath, completeLoaderCode);
+  await fs.mkdir("dist", { recursive: true });
+  await fs.copyFile("node_modules/mermaid/dist/mermaid.min.js", "dist/mermaid.min.js");
 })();
+
